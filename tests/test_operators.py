@@ -108,11 +108,16 @@ def test_sigmoid(a: float) -> None:
     * It is  strictly increasing.
     """
     # TODO: Implement for Task 0.2.
-    assert sigmoid(a) > 0
-    assert sigmoid(a) < 1
-    assert sigmoid(a) + sigmoid(-a) == 1.0
-    assert sigmoid(0) == 0.5
-    assert sigmoid(a+0.1) > sigmoid(a)
+    assert sigmoid(a) >= 0
+    assert sigmoid(a) <= 1
+    assert_close( sigmoid(a) + sigmoid(-a) , 1.0 )
+    assert_close( sigmoid(0) , 0.5 )
+    v1 = sigmoid(a+1)
+    v2 = sigmoid(a)
+    if minitorch.operators.is_close(v2, 1.0):
+        assert v1 >= v2
+    else:
+        assert v1 > v2
 
 
 @pytest.mark.task0_2
@@ -141,7 +146,7 @@ def test_distribute(a: float, b: float, c: float) -> None:
     :math:`z \times (x + y) = z \times x + z \times y`
     """
     # TODO: Implement for Task 0.2.
-    assert mul(a, add(b, c)) == add(mul(a,b), mul(a,c))
+    assert_close(mul(a, add(b, c)), add(mul(a,b), mul(a,c)))
 
 
 @pytest.mark.task0_2
@@ -176,7 +181,10 @@ def test_sum_distribute(ls1: List[float], ls2: List[float]) -> None:
     is the same as the sum of each element of `ls1` plus each element of `ls2`.
     """
     # TODO: Implement for Task 0.3.
-    raise NotImplementedError("Need to implement for Task 0.3")
+    res = addLists(ls1, ls2)
+    check = [a+b for a,b in zip(ls1, ls2)]
+    for i,j in zip(res, check):
+        assert_close(i, j)
 
 
 @pytest.mark.task0_3

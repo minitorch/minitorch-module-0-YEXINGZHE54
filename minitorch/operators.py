@@ -60,17 +60,17 @@ def max(a: float, b: float) -> float:
         return a
     return b
 
-def is_close(a: float, b: float) -> float:
-    if (a > b and a - b < 1e-2):
-        return 1.0
+def is_close(a: float, b: float) -> bool:
+    if (a >= b and a - b < 1e-2):
+        return True
     if (a < b and b-a < 1e-2):
-        return 1.0
-    return 0
+        return True
+    return False
 
 def sigmoid(a: float) -> float:
     if a >= 0:
-        return 1 / (1 + exp(-a))
-    return exp(a) / (1 + exp(a))
+        return 1.0 / (1.0 + exp(-a))
+    return exp(a) / (1.0 + exp(a))
 
 def relu(a: float) -> float:
     return max(0, a)
@@ -118,8 +118,7 @@ def map(fn: Callable[[float], float], data: Iterable[float]) -> Iterable[float]:
 def zipWith(fn: Callable[[float, float], float], data1: Iterable[float], data2: Iterable[float]) -> Iterable[float]:
     return [ fn(a,b) for (a,b) in zip(data1, data2) ]
 
-def reduce(fn: Callable[[float, float], float], data: Iterable[float]) -> float:
-    init = 0
+def reduce(fn: Callable[[float, float], float], init: float, data: Iterable[float]) -> float:
     for a in data:
         init = fn(init, a)
     return init
@@ -132,7 +131,7 @@ def addLists(data1: Iterable[float], data2: Iterable[float]) -> Iterable[float]:
     return zipWith(add, data1, data2)
 
 def sum(data: Iterable[float]) -> float:
-    return reduce(add, data)
+    return reduce(add, 0, data)
 
 def prod(data: Iterable[float]) -> float:
-    return reduce(mul, data)
+    return reduce(mul, 1, data)

@@ -53,8 +53,8 @@ class Module:
         """
         # TODO: Implement for Task 0.4.
         params = list(self._parameters.items())
-        for m in self.modules():
-            params.extend(m.named_parameters())
+        for k,m in self.__dict__["_modules"].items():
+            params.extend([ (k + "." + k1, p1)  for k1,p1 in m.named_parameters() ])
         return params
 
     def parameters(self) -> Sequence[Parameter]:
